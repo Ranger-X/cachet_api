@@ -99,9 +99,10 @@ class CachetComponents < CachetClient
   #
   # @return object
 
-  def list
+  def list(options = {})
     request method:  :get,
-            url:     @base_url + 'components'
+            url:     @base_url + 'components',
+            payload: options
   end
 
   ##
@@ -232,9 +233,10 @@ class CachetIncidents < CachetClient
   #
   # @return object
 
-  def list
+  def list(options = {})
     request method:  :get,
-            url:     @base_url + 'incidents'
+            url:     @base_url + 'incidents',
+            payload: options
   end
 
   ##
