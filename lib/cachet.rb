@@ -66,7 +66,12 @@ class CachetClient
   # @return object
 
   def request(params)
-    response = RestClient::Request.execute(params.merge(headers: @headers))
+    # from rest-client docs:
+    # Due to unfortunate choices in the original API, the params used to populate the query string are actually
+    # taken out of the headers hash. So if you want to pass both the params hash and more complex options,
+    # use the special key :params in the headers hash.
+    query_params = params.has_key?(:query) ? { params: params[:query] } : {}
+    response = RestClient::Request.execute(params.merge(headers: @headers.merge(query_params)))
     code = response.code
 
     if response.code == 200
@@ -236,7 +241,7 @@ class CachetIncidents < CachetClient
   def list(options = {})
     request method:  :get,
             url:     @base_url + 'incidents',
-            payload: options
+            query:   options
   end
 
   ##
@@ -265,7 +270,7 @@ class CachetIncidents < CachetClient
   def create(options)
     request method:  :post,
             url:     @base_url + 'incidents',
-            payload: options
+            query:   options
   end
 
   ##
